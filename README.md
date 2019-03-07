@@ -7,9 +7,10 @@ Five themes are included: mono, paper, dark, myDark and color.
 
 ## Screenshots
 
-Theme: myDark
-![Theme: myDark][image-1]
-Theme: dark
+Theme: myDark  
+![Theme: myDark][image-1]  
+
+Theme: dark  
 ![Theme: dark][image-2]
 
 ## Settings
