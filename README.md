@@ -8,9 +8,9 @@ Five themes are included: mono, paper, dark, myDark and color.
 This is my second version. This time it is written using REACT.
 
 ## Screenshots
-Theme: myDark
+##### Theme: myDark
 ![Theme: myDark][image-1]
-Theme: dark
+##### Theme: dark
 ![Theme: dark][image-2]
 
 ## Version
