@@ -2,7 +2,7 @@
 
 Übersicht widget to display the macOS name, version and build on the desktop.  
 Additionally it shows the system uptime.  
-The Build number can be hidden and the widget is themable.  
+The Build number can be hidden and the widget is themeable.  
 Five themes are included: mono, paper, dark, myDark and color.
 
 This is my second version. This time it is written using REACT.
@@ -14,9 +14,10 @@ This is my second version. This time it is written using REACT.
 ![Theme: dark][image-2]
 
 ## Version
-2.0.1
+2.0.2
 
 ## History
+- 2.0.2 Update for Catalina
 - 2.0.1 better error handling
 - 2.0   updated to REACT
 - 1.0   written in CoffeeScript  

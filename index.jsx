@@ -3,8 +3,9 @@
   Description:  Shows OS-Version and Up-Time for Übersicht
   Created:      05.Apr.2019
   Author:       Gert Massheimer
-  Version:      2.0.1
-  History:      2.0.1 better error handling
+  Version:      2.0.2
+  History:      2.0.2 Update for Catalina
+                2.0.1 better error handling
                 2.0   updated to REACT
                 1.0   written in CoffeeScript
   Based on:
@@ -132,6 +133,11 @@ export const render = ({OS_Version, UP_Time, error}) => {
         if (theme === 'dark' || theme === 'myDark') icon = iconDir + "mojave_dark.png";
         else icon = iconDir + "mojave.png";
         osRelease = ' Mojave';
+        break;
+      case '10.15':
+        if (theme === 'dark' || theme === 'myDark') icon = iconDir + "catalina_dark.png";
+        else icon = iconDir + "catalina.png";
+        osRelease = ' Catalina';
         break;
       default:
         icon = iconDir + "mac_os.png";
