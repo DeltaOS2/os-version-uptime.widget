@@ -3,8 +3,9 @@
   Description:  Shows OS-Version and Up-Time for Übersicht
   Created:      05.Apr.2019
   Author:       Gert Massheimer
-  Version:      2.0.2
-  History:      2.0.2 Update for Catalina
+  Version:      2.1
+  History:      2.1   Extended for Catalina
+                      Added auto switch icon depending on dark-/light-mode
                 2.0.1 better error handling
                 2.0   updated to REACT
                 1.0   written in CoffeeScript
@@ -20,9 +21,8 @@
 
 // const theme = 'mono';
 // const theme = 'paper';
-// const theme = 'color';
-const theme = 'dark';
-//const theme = 'myDark'; // color theme with dark icon;
+const theme = 'color';
+// const theme = 'dark';
 /*-----------------------------------------------------------------------*/
 
 // Show or hide the version build information in the widget
@@ -55,7 +55,7 @@ else if (theme === 'paper') {
   bkGround     = 'rgba(255, 255, 255, 1)';
   opacityLevel = '0.8';
 }
-else {
+else {  // theme = color
   labelColor   = '#fff';     // white
   nameColor    = '#ffa640';  // orange
   osColor      = '#7dff7d';  // light green
@@ -72,71 +72,70 @@ if (theme === 'dark') {
 /*=== DO NOT EDIT AFTER THIS LINE unless you know what you're doing! ===
 ========================================================================*/
 
+// noinspection NpmUsedModulesInstalled
 import { css, styled } from "uebersicht";
 
+// noinspection JSUnusedGlobalSymbols
 export const refreshFrequency = 60000; // every 60000ms = every minute
 
+// noinspection JSUnusedGlobalSymbols
 export const command = "os-version-uptime.widget/data.sh";
 
+// noinspection JSUnusedGlobalSymbols
 export const updateState = (event, previousState) => {
   if (event.error) {
     return { ...previousState, warning: `We got an error: ${event.error}` };
   }
-  const [OS_Version, UP_Time] = event.output.split(/\r\n|\r|\n/g); // splitting at linebreak
-  return { OS_Version, UP_Time };
+  const [UP_Time, OS_Version, Interface] = event.output.split(/\r\n|\r|\n/g); // splitting at linebreak
+  return { UP_Time, OS_Version, Interface };
 };
 
-export const render = ({OS_Version, UP_Time, error}) => {
+// noinspection JSUnusedGlobalSymbols
+export const render = ({UP_Time, OS_Version, Interface, error}) => {
 
-  if (error) return (
-    <div>Something went wrong: <strong>{String(error)}</strong></div>
-  );
+  if (error) { // noinspection JSXNamespaceValidation
+    return (
+        <div>Something went wrong: <strong>{String(error)}</strong></div>
+      );
+  }
   else {
 
     /* --- Create the up-time string --------------------------------------*/
-    const upValues = UP_Time.split(" ");
-    const up0 = upValues[0];
-    const up1 = upValues[1];
-    const up2 = upValues[2] ? upValues[2] : '';
-    const up3 = upValues[3] ? upValues[3] : '';
-    const up4 = upValues[4] ? upValues[4] : '';
-    const up5 = upValues[5] ? upValues[5] : '';
-    const uptime = up0 + ' ' + up1 + ' ' + up2 + ' ' + up3 + ' ' + up4 + ' ' + up5;
+    let [d, dd, h, hh, m, mm] = UP_Time.split(" ");
+    h  = h  ? h  : '';
+    hh = hh ? hh : '';
+    m  = m  ? m  : '';
+    mm = mm ? mm : '';
+    let uptime = d + ' ' + dd + ' ' + h + ' ' + hh + ' ' + m + ' ' + mm;
 
     /* --- Create the OS information --------------------------------------*/
-    const osValues  = OS_Version.split(" ");
-    let   osName    = osValues[0];
-    const osVersion = osValues[1];
-    const osBuild   = osValues[2];
-
+    let [osName, osVersion, osBuild] = OS_Version.split(" ");
     const iconDir = 'os-version-uptime.widget/icons/';
 
     let icon, osRelease;
-    switch (osVersion.substr(0, 5)) {
-      case '10.10':
+    switch (Number(osVersion.substr(0, 5))) {
+      case 10.10:
         icon = iconDir + "yosemite.png";
         osRelease = ' Yosemite';
         break;
-      case '10.11':
+      case 10.11:
         icon = iconDir + "el_capitan.png";
         osRelease = ' El Capitan';
         break;
-      case '10.12':
+      case 10.12:
         icon = iconDir + "sierra.png";
         osRelease = ' Sierra';
         break;
-      case '10.13':
+      case 10.13:
         icon = iconDir + "high_sierra.png";
         osRelease = ' High Sierra';
         break;
-      case '10.14':
-        if (theme === 'dark' || theme === 'myDark') icon = iconDir + "mojave_dark.png";
-        else icon = iconDir + "mojave.png";
+      case 10.14:
+        if (Interface === 'Dark') icon = iconDir + "mojave_dark.png"; else icon = iconDir + "mojave.png";
         osRelease = ' Mojave';
         break;
-      case '10.15':
-        if (theme === 'dark' || theme === 'myDark') icon = iconDir + "catalina_dark.png";
-        else icon = iconDir + "catalina.png";
+      case 10.15:
+        if (Interface === 'Dark') icon = iconDir + "catalina_dark.png"; else icon = iconDir + "catalina.png";
         osRelease = ' Catalina';
         break;
       default:
@@ -189,6 +188,7 @@ export const render = ({OS_Version, UP_Time, error}) => {
 };
 
 /* --- Widget styles ----------------------------------------------------*/
+// noinspection JSUnusedGlobalSymbols
 export const className =`
   ${pos1};
   ${pos2};
